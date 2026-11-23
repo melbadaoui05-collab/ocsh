@@ -94,10 +94,3 @@ ocsh/
 │   ├── signals.c/.h  # SIGINT, SIGCHLD
 │   └── tests/
 ```
-
-## Livrables
-
-- `code/` : code C commenté + Makefile + scripts
-- `README.md`
-- `report.pdf` (2 à 4 pages)
-- `demo.mp4` (lien : *à compléter*)
