@@ -27,7 +27,6 @@ Exécution
 
 
 Exemple
-
 osinfo
 
 say hello -> tr a-z A-Z
