@@ -1,52 +1,103 @@
-OCSH
+# ocsh — Mini-shell en C
 
-Mini-shell développé en C dans le cadre du module Systèmes d'Exploitation.
+Projet 3 — Systèmes d'Exploitation (UIR/ESIN)
 
+`ocsh` est un interpréteur de commandes écrit en C qui utilise directement les appels système du noyau (`fork`, `execvp`, `wait`, `pipe`, `dup2`, `signal`...). Il implémente ses propres commandes renommées ainsi que l'opérateur de pipe `->`.
 
-Fonctionnalités
+## Membres du groupe
 
-Builtins : go, quit, path, say, info, past, osinfo
+| Nom | GitHub | Partie |
+|-----|--------|--------|
+| Nom 1 | @pseudo1 | Parser + REPL |
+| Nom 2 | @pseudo2 | Exécution, redirections, pipes |
+| Nom 3 | @pseudo3 | Builtins, alias, variables |
+| Nom 4 | @pseudo4 | Signaux, historique, script, tests, rapport |
 
-Alias : list, show, copy, move, del, newdir, newfile
+## Compilation et lancement
 
-Redirections : <, >, >>
+Nécessite Linux ou macOS (ou WSL / GitHub Codespaces) et `gcc`.
 
-Pipe personnalisé : ->
+```bash
+cd code
+make          # compile et crée l'exécutable ./ocsh
+./ocsh        # lance le shell
+make clean    # supprime l'exécutable
+```
 
-Exécution en arrière-plan : &
+## Commandes disponibles
 
-Gestion des signaux SIGINT et SIGCHLD
+### Builtins
 
-Compilation
+| Bash | ocsh | Description |
+|------|------|-------------|
+| `cd` | `go` | Changer de répertoire |
+| `exit` | `quit` | Quitter le shell |
+| `pwd` | `path` | Afficher le répertoire courant |
+| `echo` | `say` | Afficher du texte |
+| `help` | `info` | Afficher l'aide |
+| `history` | `past` | Afficher l'historique |
+| pipe `\|` | pipe `->` | Relier deux commandes |
+| — | `osinfo` | Affiche « Systèmes d'Exploitation -- UIR/ESIN » |
 
-make
+### Alias
 
-Exécution
+| Bash | ocsh |
+|------|------|
+| `ls` | `list` |
+| `cat` | `show` |
+| `cp` | `copy` |
+| `mv` | `move` |
+| `rm` | `del` |
+| `mkdir` | `newdir` |
+| `touch` | `newfile` |
 
-./ocsh
+## Fonctionnalités (jalons)
 
+- [ ] 1. Boucle REPL : lecture → découpage par `->` → `fork()` → `execvp()` → `wait()`
+- [ ] 2. Builtins et alias ; redirections `>`, `>>`, `<` via `dup2`
+- [ ] 3. Pipes `->` ; arrière-plan `&` ; signaux `SIGINT` / `SIGCHLD`
+- [ ] 4. Variables et expansion : `$VAR`, `${VAR}`, `export`, `$?`, `$!`
+- [ ] 5. Substitution `$(...)` / backticks ; `.ocshrc` ; historique et complétion
+- [ ] 6. Mode script `ocsh script.ocsh` (`if` / `for` / `while`)
+- [ ] Optionnel : job control `jobs`, `fg`, `bg`
 
-Exemple
+(Cocher les cases au fur et à mesure : `- [x]`.)
 
-osinfo
+## Exemples d'utilisation
 
-say hello -> tr a-z A-Z
+```
+ocsh> list
+ocsh> go ..
+ocsh> path
+ocsh> say hello > f.txt
+ocsh> show f.txt
+ocsh> show f.txt -> wc -l
+ocsh> sleep 10 &
+ocsh> ps
+ocsh> osinfo
+```
 
-say bonjour > test.txt
+## Structure du projet
 
-show test.txt
+```
+ocsh/
+├── README.md
+├── report.pdf
+├── code/
+│   ├── Makefile
+│   ├── main.c        # boucle REPL
+│   ├── parser.c/.h   # découpage de la ligne de commande
+│   ├── exec.c/.h     # fork, execvp, wait, dup2, pipe
+│   ├── builtins.c/.h # go, quit, path, say, info, past, osinfo
+│   ├── alias.c/.h    # list, show, copy, move, del, newdir, newfile
+│   ├── vars.c/.h     # variables et expansion
+│   ├── signals.c/.h  # SIGINT, SIGCHLD
+│   └── tests/
+```
 
-sleep 5 &
+## Livrables
 
-past
-
-
-Auteurs
-
-El Badaoui Mohamed
-
-Attouch Douae
-
-El Alama Marwa
-
-Groupe Triple Prompt
+- `code/` : code C commenté + Makefile + scripts
+- `README.md`
+- `report.pdf` (2 à 4 pages)
+- `demo.mp4` (lien : *à compléter*)
